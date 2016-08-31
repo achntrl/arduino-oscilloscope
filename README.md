@@ -3,7 +3,7 @@
 arduino-oscilloscope let you use your arduino as a small oscilloscope by using the analog pins. 
 
 ## Pre-required 
-The [Arduino IDE](https://www.arduino.cc/en/Main/Software) to load a program in a Arduino board
+The [Arduino IDE](https://www.arduino.cc/en/Main/Software), to load a program in an Arduino board.
 
 [Processing](https://processing.org/download/), a Java-based language and software that allow easy graphic programming.
 
@@ -16,18 +16,18 @@ The program is very simple to launch. There is only two files.
 `Oscilloscope/oscilloscope.pde` is the program you should use with Processing.
 
 ## How to plug the Arduino
-Plug the GND pin to the ground on your circuit. Use the A0 to A3 pin to measure your signals. It can only measure value between 0 and 5V.
+Connect a GND pin to the ground on your circuit. Use the A0 to A3 pins to measure your signals. These pins can only measure values between 0 and 5V.
 
 ## How to use the Oscilloscope
 ![example](example.png)
 
 **Reset** : Clear the screen and put the cursor at the start of the screen.
 
-**TimePerDiv** : Choose the time resolution of the oscilloscope
+**TimePerDiv** : Choose the time resolution of the oscilloscope.
 
-**Channels Selectors** : Choose which channel you want to display
+**Channels Selectors** : Choose which channel you want to display.
 
-**Trigger** : Clear the screen and start displaying when the oscillogram crosses the threshold going up (down) when the up (down) mode is selected. You can change the threshold by clicking on the slider. You can also change which Channel is triggering.
+**Trigger** : Clear the screen and start displaying when the oscillogram crosses the threshold going up (down) when the up (down) mode is selected. You can change the threshold by clicking on the slider. You can also change which channel is triggering.
 
 **Pause** : Freeze the display. The oscillogram won't clear the screen when it should have reached the end of the screen. Useful to take a closer look at what just happened.
 
