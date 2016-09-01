@@ -17,7 +17,7 @@ Textlabel textLabelChan1, textLabelChan2, textLabelChan3, textLabelChan4;
 int horizontalBorderPx = 10;      // Top & bottom border padding (px)
 int verticalBorderPx = 10;        // Left and right border padding (px)
 int menuSizePx = 250; 
-int menuPaddingPx = 30;           // Padding between the right of the grid and the menu
+int menuPaddingPx = 20;           // Padding between the right of the grid and the menu
 int horizontalAlignPx;              // initialized in setup because it need `width`
 int divSize_ms = 1000;            // time span of the screen (in ms) 
 // Measures containers
@@ -35,7 +35,7 @@ boolean hasEndedPause = false;
 // Ran once by processing at the start of the program
 void setup()
 {
-  size(1600, 820); // Screen size
+  size(1560, 820); // Screen size
   noStroke();
   horizontalAlignPx= width - menuSizePx + verticalBorderPx + menuPaddingPx;
   // [EDIT] Adapt portName to your computer by changing the index. Portname should be the
@@ -102,19 +102,19 @@ void legend()
 {
   stroke(COLORS[0]);
   fill(COLORS[0]);
-  rect(horizontalAlignPx, 440, 20, 20);
+  rect(horizontalAlignPx + 70, 440, 20, 20);
 
   stroke(COLORS[1]);
   fill(COLORS[1]);
-  rect(horizontalAlignPx, 480, 20, 20);
+  rect(horizontalAlignPx + 70, 480, 20, 20);
 
   stroke(COLORS[2]);
   fill(COLORS[2]);
-  rect(horizontalAlignPx, 520, 20, 20);
+  rect(horizontalAlignPx + 70, 520, 20, 20);
 
   stroke(COLORS[3]);
   fill(COLORS[3]);
-  rect(horizontalAlignPx, 560, 20, 20);
+  rect(horizontalAlignPx + 70, 560, 20, 20);
 }
 
 
@@ -128,7 +128,7 @@ void menu()
     .setPosition(horizontalAlignPx, 20)
     .setSize(200, 20)
     ;
-  List divs = Arrays.asList("100ms", "200ms", "500ms", "1s"); // Time per div options
+  List divs = Arrays.asList("1s/div", "500ms/div", "200ms/div", "100ms/div"); // Time per div options
   cp5.addScrollableList("timePerDiv")
     .setPosition(horizontalAlignPx, 60)
     .setSize(200, 20+40)
@@ -136,10 +136,11 @@ void menu()
     .setItemHeight(20)
     .addItems(divs)
     .setType(ControlP5.DROPDOWN)
+    .close()
     ;  
 
   channelDisplay = cp5.addCheckBox("channelDisplay")
-    .setPosition(horizontalAlignPx, 140)
+    .setPosition(horizontalAlignPx + 60, 140)
     .setSize(20, 20)
     .setItemsPerRow(2)
     .setSpacingColumn(50)
@@ -175,50 +176,58 @@ void menu()
     ;
 
   channelTrigger = cp5.addRadioButton("channelTrigger")
-    .setPosition(horizontalAlignPx, 300)
+    .setPosition(horizontalAlignPx + 60, 300)
     .setSize(20, 20+40)
     .setBarHeight(20)
     .setItemHeight(20)
     .setItemsPerRow(2)
     .setSpacingColumn(50)
     .setSpacingRow(20)
-    .addItem("Chan1T", 0)
-    .addItem("Chan2T", 1)
-    .addItem("Chan3T", 2)
-    .addItem("Chan4T", 3)
+    .addItem("Chan1 ", 0)
+    .addItem("Chan2 ", 1)
+    .addItem("Chan3 ", 2)
+    .addItem("Chan4 ", 3)
     .activate(0);
   ;
 
   pause = cp5.addToggle("pause")
     .setPosition(horizontalAlignPx, 380)
     .setSize(200, 20)
-    .setLabel("                                           PAUSE");
+    .setLabel("");
   ;
+  
+    cp5.addTextlabel("PauseText")
+    .setText("PAUSE")
+    .setPosition(horizontalAlignPx + 100 - 18, 380 + 5)
+    .setColorValue(#FFFFFF)
+    ;
+  
 
   textLabelChan1 = cp5.addTextlabel("textLabelChan1")
     .setText("CHAN1")
-    .setPosition(horizontalAlignPx + 30, 440 + 6)
+    .setPosition(horizontalAlignPx + 30 + 70, 440 + 6)
     .setColorValue(#FFFFFF)
     ;
 
   textLabelChan2 = cp5.addTextlabel("textLabelChan2")
     .setText("CHAN2")
-    .setPosition(horizontalAlignPx + 30, 480 + 6)
+    .setPosition(horizontalAlignPx + 30 + 70, 480 + 6)
     .setColorValue(#FFFFFF)
     ;
 
   textLabelChan3 = cp5.addTextlabel("textLabelChan3")
     .setText("CHAN3")
-    .setPosition(horizontalAlignPx + 30, 520 + 6)
+    .setPosition(horizontalAlignPx + 30 + 70, 520 + 6)
     .setColorValue(#FFFFFF)
     ;
 
   textLabelChan4 = cp5.addTextlabel("textLabelChan4")
     .setText("CHAN4")
-    .setPosition(horizontalAlignPx + 30, 560 + 6)
+    .setPosition(horizontalAlignPx + 30 + 70, 560 + 6)
     .setColorValue(#FFFFFF)
     ;
 
+  // Voltage labels
   double voltageNotch = ((double)height - ((double)horizontalBorderPx * 2.0))/ 5.0;
   int counter = 0;
   for (int j =(int)horizontalBorderPx; j <= height - horizontalBorderPx; j+= (int)voltageNotch) {
@@ -227,9 +236,9 @@ void menu()
       .setPosition(horizontalAlignPx - menuPaddingPx, j - 5)
       .setColorValue(#FFFFFF)
       ;
-
     counter++;
   }
+
 }
 
 // Resets the lines (they start again at 0)
@@ -250,16 +259,16 @@ void timePerDiv(int n)
   reset(0);
   switch(n) {
   case 0:
-    divSize_ms = 100;
+    divSize_ms = 1000;
     break;
   case 1:
-    divSize_ms = 200;
-    break;
-  case 2:
     divSize_ms = 500;
     break;
+  case 2:
+    divSize_ms = 200;
+    break;
   case 3:
-    divSize_ms = 1000;
+    divSize_ms = 100;
     break;
   default:
     divSize_ms = 1000;
