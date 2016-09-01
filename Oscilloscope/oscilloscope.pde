@@ -5,7 +5,7 @@ import java.util.*;
 
 // Constants
 final int CHANNELS = 4; // Number of channels on the oscilloscope
-final int[] COLORS = {#FFFF00, #FF0000, #00FF00, #0000FF}; // Colors for each channel
+final int[] COLORS = {#FFFF00, #FF0000, #00FF00, #00FFFF}; // Colors for each channel
 // Menu elements
 ControlP5 cp5;
 CheckBox channelDisplay;
@@ -39,7 +39,8 @@ void setup()
   noStroke();
   verticalAlign= width - menuSizePx + verticalBorderPx + menuPaddingPx;
   // [EDIT] Adapt portName to your computer by changing the index. Portname should be the
-  // /dev/cu.* corresponding to your Arduino
+  // /dev/cu.* corresponding to your Arduino. If you do ls /dev/cu.* and the arduino is the 
+  // 4th in the list put index = 4 - 1 = 3 in Serial.list()[index]
   String portName = Serial.list()[3]; 
   serialConnexion = new Serial(this, portName, 19200);
   println("Connected to "+portName);
@@ -101,19 +102,19 @@ void legend()
 {
   stroke(COLORS[0]);
   fill(COLORS[0]);
-  rect(verticalAlign, 420, 20, 20);
+  rect(verticalAlign, 440, 20, 20);
 
   stroke(COLORS[1]);
   fill(COLORS[1]);
-  rect(verticalAlign, 460, 20, 20);
+  rect(verticalAlign, 480, 20, 20);
 
   stroke(COLORS[2]);
   fill(COLORS[2]);
-  rect(verticalAlign, 500, 20, 20);
+  rect(verticalAlign, 520, 20, 20);
 
   stroke(COLORS[3]);
   fill(COLORS[3]);
-  rect(verticalAlign, 540, 20, 20);
+  rect(verticalAlign, 560, 20, 20);
 }
 
 
@@ -159,7 +160,7 @@ void menu()
     ;
 
   upOrDown = cp5.addToggle("upOrDown")
-    .setPosition(verticalAlign + 100, 220)
+    .setPosition(verticalAlign + 120, 220)
     .setSize(80, 20)
     .setMode(ControlP5.SWITCH)
     .setCaptionLabel("Up                           Down")
@@ -196,25 +197,25 @@ void menu()
 
   textLabelChan1 = cp5.addTextlabel("textLabelChan1")
     .setText("CHAN1")
-    .setPosition(verticalAlign + 30, 420 + 6)
+    .setPosition(verticalAlign + 30, 440 + 6)
     .setColorValue(#FFFFFF)
     ;
 
   textLabelChan2 = cp5.addTextlabel("textLabelChan2")
     .setText("CHAN2")
-    .setPosition(verticalAlign + 30, 460 + 6)
+    .setPosition(verticalAlign + 30, 480 + 6)
     .setColorValue(#FFFFFF)
     ;
 
   textLabelChan3 = cp5.addTextlabel("textLabelChan3")
     .setText("CHAN3")
-    .setPosition(verticalAlign + 30, 500 + 6)
+    .setPosition(verticalAlign + 30, 520 + 6)
     .setColorValue(#FFFFFF)
     ;
 
   textLabelChan4 = cp5.addTextlabel("textLabelChan4")
     .setText("CHAN4")
-    .setPosition(verticalAlign + 30, 540 + 6)
+    .setPosition(verticalAlign + 30, 560 + 6)
     .setColorValue(#FFFFFF)
     ;
 }

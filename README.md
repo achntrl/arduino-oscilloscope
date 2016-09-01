@@ -15,6 +15,8 @@ The program is very simple to launch. There is only two files.
 
 `Oscilloscope/oscilloscope.pde` is the program you should use with Processing.
 
+Please note that you should select the right serial port. Look for the `[EDIT]` tag in the setup function for more details.
+
 ## How to plug the Arduino
 Connect a GND pin to the ground on your circuit. Use the A0 to A3 pins to measure your signals. These pins can only measure values between 0 and 5V.
 
@@ -32,6 +34,8 @@ Connect a GND pin to the ground on your circuit. Use the A0 to A3 pins to measur
 **Pause** : Freeze the display. The oscillogram won't clear the screen when it should have reached the end of the screen. Useful to take a closer look at what just happened.
 
 <br/><br/><br/>
+
+I have only tried it on macOS since it's the only OS that I have at my disposition at the moment. I will definitively try it on Linux and Windows when I get the chance.
 
 Older version [here](http://achntrl.com/2016/04/05/build_an_oscilloscope_with_an_arduino/).
 
