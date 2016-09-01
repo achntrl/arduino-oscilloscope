@@ -14,12 +14,12 @@ Toggle trigger, upOrDown, pause;
 Slider triggerValue;
 Textlabel textLabelChan1, textLabelChan2, textLabelChan3, textLabelChan4;
 // Drawing parameters
-int horizontalBorderPx = 10; // Border padding (px)
-int verticalBorderPx = 10; // Border padding (px)
-int menuSizePx = 240;
-int menuPaddingPx = 20;
-int verticalAlign; 
-int divSize_ms = 1000; // time span of the screen (in ms) 
+int horizontalBorderPx = 10;      // Top & bottom border padding (px)
+int verticalBorderPx = 10;        // Left and right border padding (px)
+int menuSizePx = 250; 
+int menuPaddingPx = 30;           // Padding between the right of the grid and the menu
+int horizontalAlignPx;              // initialized in setup because it need `width`
+int divSize_ms = 1000;            // time span of the screen (in ms) 
 // Measures containers
 Serial serialConnexion;
 int[] AdcReadings = {0, 0, 0, 0}; // Store the raw values from the ADC
@@ -35,9 +35,9 @@ boolean hasEndedPause = false;
 // Ran once by processing at the start of the program
 void setup()
 {
-  size(1560, 820); // Screen size (better if (x - 480) is multiple of 12)
+  size(1600, 820); // Screen size
   noStroke();
-  verticalAlign= width - menuSizePx + verticalBorderPx + menuPaddingPx;
+  horizontalAlignPx= width - menuSizePx + verticalBorderPx + menuPaddingPx;
   // [EDIT] Adapt portName to your computer by changing the index. Portname should be the
   // /dev/cu.* corresponding to your Arduino. If you do ls /dev/cu.* and the arduino is the 
   // 4th in the list put index = 4 - 1 = 3 in Serial.list()[index]
@@ -63,14 +63,14 @@ void grid()
   double timeNotch, voltageNotch;
   // Vertical lines for the time : 1s/div scale
   timeNotch = (double)(width -  menuSizePx) / 12;
-  for (int i = (int)timeNotch; i <= width - menuSizePx; i += (int)timeNotch) {
+  for (int i = (int)timeNotch; i <= width - menuSizePx - menuPaddingPx; i += (int)timeNotch) {
     line(i + verticalBorderPx, horizontalBorderPx, i + verticalBorderPx, height - horizontalBorderPx);
   }
   // Horizontal lines for the voltage : 0.2V scale
   voltageNotch = ((double)height - ((double)horizontalBorderPx * 2.0)) * 0.2 / 5.0;
   int counter = 0;
   for (int j =(int)voltageNotch; j <= height - horizontalBorderPx; j+= (int)voltageNotch) {
-    /* Every volt, we draw a large line */
+    // Every volt, we draw a large line
     if (counter % 5 == 4)
     {
       strokeWeight(3);
@@ -102,19 +102,19 @@ void legend()
 {
   stroke(COLORS[0]);
   fill(COLORS[0]);
-  rect(verticalAlign, 440, 20, 20);
+  rect(horizontalAlignPx, 440, 20, 20);
 
   stroke(COLORS[1]);
   fill(COLORS[1]);
-  rect(verticalAlign, 480, 20, 20);
+  rect(horizontalAlignPx, 480, 20, 20);
 
   stroke(COLORS[2]);
   fill(COLORS[2]);
-  rect(verticalAlign, 520, 20, 20);
+  rect(horizontalAlignPx, 520, 20, 20);
 
   stroke(COLORS[3]);
   fill(COLORS[3]);
-  rect(verticalAlign, 560, 20, 20);
+  rect(horizontalAlignPx, 560, 20, 20);
 }
 
 
@@ -125,12 +125,12 @@ void menu()
 
   cp5.addButton("reset")
     .setValue(0)
-    .setPosition(verticalAlign, 20)
+    .setPosition(horizontalAlignPx, 20)
     .setSize(200, 20)
     ;
   List divs = Arrays.asList("100ms", "200ms", "500ms", "1s"); // Time per div options
   cp5.addScrollableList("timePerDiv")
-    .setPosition(verticalAlign, 60)
+    .setPosition(horizontalAlignPx, 60)
     .setSize(200, 20+40)
     .setBarHeight(20)
     .setItemHeight(20)
@@ -139,7 +139,7 @@ void menu()
     ;  
 
   channelDisplay = cp5.addCheckBox("channelDisplay")
-    .setPosition(verticalAlign, 140)
+    .setPosition(horizontalAlignPx, 140)
     .setSize(20, 20)
     .setItemsPerRow(2)
     .setSpacingColumn(50)
@@ -155,19 +155,19 @@ void menu()
     ;
 
   trigger = cp5.addToggle("trigger")
-    .setPosition(verticalAlign, 220)
+    .setPosition(horizontalAlignPx, 220)
     .setSize(100, 20)
     ;
 
   upOrDown = cp5.addToggle("upOrDown")
-    .setPosition(verticalAlign + 120, 220)
+    .setPosition(horizontalAlignPx + 120, 220)
     .setSize(80, 20)
     .setMode(ControlP5.SWITCH)
     .setCaptionLabel("Up                           Down")
     ;
 
   triggerValue = cp5.addSlider("triggerValue")
-    .setPosition(verticalAlign, 260)
+    .setPosition(horizontalAlignPx, 260)
     .setSize(200, 20)
     .setRange(0, 5)
     .setCaptionLabel("V")
@@ -175,7 +175,7 @@ void menu()
     ;
 
   channelTrigger = cp5.addRadioButton("channelTrigger")
-    .setPosition(verticalAlign, 300)
+    .setPosition(horizontalAlignPx, 300)
     .setSize(20, 20+40)
     .setBarHeight(20)
     .setItemHeight(20)
@@ -190,34 +190,46 @@ void menu()
   ;
 
   pause = cp5.addToggle("pause")
-    .setPosition(verticalAlign, 380)
+    .setPosition(horizontalAlignPx, 380)
     .setSize(200, 20)
     .setLabel("                                           PAUSE");
   ;
 
   textLabelChan1 = cp5.addTextlabel("textLabelChan1")
     .setText("CHAN1")
-    .setPosition(verticalAlign + 30, 440 + 6)
+    .setPosition(horizontalAlignPx + 30, 440 + 6)
     .setColorValue(#FFFFFF)
     ;
 
   textLabelChan2 = cp5.addTextlabel("textLabelChan2")
     .setText("CHAN2")
-    .setPosition(verticalAlign + 30, 480 + 6)
+    .setPosition(horizontalAlignPx + 30, 480 + 6)
     .setColorValue(#FFFFFF)
     ;
 
   textLabelChan3 = cp5.addTextlabel("textLabelChan3")
     .setText("CHAN3")
-    .setPosition(verticalAlign + 30, 520 + 6)
+    .setPosition(horizontalAlignPx + 30, 520 + 6)
     .setColorValue(#FFFFFF)
     ;
 
   textLabelChan4 = cp5.addTextlabel("textLabelChan4")
     .setText("CHAN4")
-    .setPosition(verticalAlign + 30, 560 + 6)
+    .setPosition(horizontalAlignPx + 30, 560 + 6)
     .setColorValue(#FFFFFF)
     ;
+
+  double voltageNotch = ((double)height - ((double)horizontalBorderPx * 2.0))/ 5.0;
+  int counter = 0;
+  for (int j =(int)horizontalBorderPx; j <= height - horizontalBorderPx; j+= (int)voltageNotch) {
+    cp5.addTextlabel(5-counter+"V")
+      .setText(5-counter+"V")
+      .setPosition(horizontalAlignPx - menuPaddingPx, j - 5)
+      .setColorValue(#FFFFFF)
+      ;
+
+    counter++;
+  }
 }
 
 // Resets the lines (they start again at 0)
@@ -329,7 +341,7 @@ boolean checkTrigger()
 void serialEvent(Serial serialConnexion) 
 { 
   try {
-    String stringRead=serialConnexion.readStringUntil('\n'); /* read serial until end of line */
+    String stringRead=serialConnexion.readStringUntil('\n'); // read serial until end of line
 
     if (stringRead != null) { 
       String[] channelReadings = split(stringRead, '\t');
