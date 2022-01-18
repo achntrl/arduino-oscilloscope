@@ -1,3 +1,6 @@
+
+
+import processing.dxf.*;
 import processing.serial.*;
 import controlP5.*;
 import java.util.*;
@@ -5,6 +8,7 @@ import java.util.*;
 
 // Constants
 final int CHANNELS = 4; // Number of channels on the oscilloscope
+final int BAUDRATE = 115200; // Baudrate
 final int[] COLORS = {#FFFF00, #FF0000, #00FF00, #00FFFF}; // Colors for each channel
 // Menu elements
 ControlP5 cp5;
@@ -41,9 +45,8 @@ void setup()
   // [EDIT] Adapt portName to your computer by changing the index. Portname should be the
   // /dev/cu.* corresponding to your Arduino. If you do ls /dev/cu.* and the arduino is the 
   // 4th in the list put index = 4 - 1 = 3 in Serial.list()[index]
-  String portName = Serial.list()[3]; 
-  serialConnexion = new Serial(this, portName, 19200);
-  println("Connected to "+portName);
+  
+  
   grid();
   menu();
 }
@@ -128,6 +131,7 @@ void menu()
     .setPosition(horizontalAlignPx, 20)
     .setSize(200, 20)
     ;
+    
   List divs = Arrays.asList("1s/div", "500ms/div", "200ms/div", "100ms/div"); // Time per div options
   cp5.addScrollableList("timePerDiv")
     .setPosition(horizontalAlignPx, 60)
@@ -226,6 +230,17 @@ void menu()
     .setPosition(horizontalAlignPx + 30 + 70, 560 + 6)
     .setColorValue(#FFFFFF)
     ;
+    
+  List ports = Arrays.asList(Serial.list()); // Time per div options
+  cp5.addScrollableList("serialPort")
+    .setPosition(horizontalAlignPx, 590)
+    .setSize(200, 20+40)
+    .setBarHeight(20)
+    .setItemHeight(20)
+    .addItems(ports)
+    .setType(ControlP5.DROPDOWN)
+    .close()
+    ;  
 
   // Voltage labels
   double voltageNotch = ((double)height - ((double)horizontalBorderPx * 2.0))/ 5.0;
@@ -273,6 +288,20 @@ void timePerDiv(int n)
   default:
     divSize_ms = 1000;
   }
+}
+
+// Change the timescale to the value in the dropdown menu
+void serialPort(int n)
+{
+  reset(0);
+  String portName = Serial.list()[n];
+  
+  if (serialConnexion != null) {
+    serialConnexion.stop();
+  }
+  
+  serialConnexion = new Serial(this, portName, 115200);
+  println("Connected to " + portName);
 }
 
 
